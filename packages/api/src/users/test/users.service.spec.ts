@@ -3,25 +3,40 @@ import { TypeOrmModule, getConnectionToken } from '@nestjs/typeorm';
 import { User } from '../user.entity';
 import { UsersService } from '../users.service';
 import { DatabaseTestModule } from '../../database/database-test.module';
+import { TestUtils } from '../../utils/TestUtils';
 import { Connection } from 'typeorm';
+import { stubUser } from '../../utils/stubs/user.stub';
+import { HttpException } from '@nestjs/common';
+import CreateUserDTO from '../dto/CreateUser.dto';
+import { Recipe } from '../../recipe/entities/recipe.entity';
+import { Ingredient } from '../../recipe/entities/ingredient.entity';
+import { Step } from '../../recipe/entities/step.entity';
 
 describe('The UsersService', () => {
   let service: UsersService;
-  let connection: Connection;
+  let connection: TestUtils;
   let module: TestingModule;
 
   beforeAll(async () => {
     jest.setTimeout(20000);
     module = await Test.createTestingModule({
-      imports: [DatabaseTestModule, TypeOrmModule.forFeature([User])],
+      imports: [
+        DatabaseTestModule,
+        TypeOrmModule.forFeature([User, Recipe, Ingredient, Step]),
+      ],
       providers: [UsersService],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    connection = module.get(getConnectionToken);
+    const conect: Connection = module.get<Connection>(getConnectionToken());
+
+    connection = new TestUtils(conect);
+
+    await connection.loadUser();
   });
 
-  afterAll(() => {
+  afterAll(async () => {
+    await connection.reloadEntities();
     module.close();
   });
 
@@ -29,27 +44,26 @@ describe('The UsersService', () => {
     expect(service).toBeDefined();
   });
 
-  /*
   it('should create a new user record and return that', async () => {
-    expect(
-      await service.create({
-        email: 'test@email.com',
-        name: '',
-        password: mockedUser.password,
-      }),
-    ).toEqual({
-      email: mockedUser.email,
-      name: mockedUser.name,
-      password: mockedUser.password,
-    });
+    const userTest = new CreateUserDTO();
+    userTest.email = `test${Date.now()}@email.com`;
+    userTest.name = 'Test 2';
+    userTest.password = 'password';
+
+    const userResult = await service.create(userTest);
+
+    expect(userResult.email).toBe(userTest.email);
+    expect(userResult.name).toBe(userTest.name);
+    expect(userResult.password).not.toBe(userTest.password);
+    expect(typeof userResult.id).toBe('number');
   });
 
   it('should return a user with same id', async () => {
-    expect(await service.getById(mockedUser.id)).toEqual(mockedUser);
+    expect(await service.getById(stubUser.id)).toEqual(stubUser);
   });
 
   it('should return a user with same email', async () => {
-    expect(await service.getByEmail(mockedUser.email)).toEqual(mockedUser);
+    expect(await service.getByEmail(stubUser.email)).toEqual(stubUser);
   });
 
   it('should throw HttpException', async () => {
@@ -59,5 +73,4 @@ describe('The UsersService', () => {
       expect(error).toBeInstanceOf(HttpException);
     }
   });
-  */
 });

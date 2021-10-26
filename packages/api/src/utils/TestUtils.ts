@@ -1,4 +1,10 @@
+import { User } from '../users/user.entity';
+import { Recipe } from '../recipe/entities/recipe.entity';
+import { Step } from '../recipe/entities/step.entity';
+import { Ingredient } from '../recipe/entities/ingredient.entity';
 import { Connection } from 'typeorm';
+import { stubUser } from './stubs/user.stub';
+import { ingredient1, recipe1, recipe2, step1 } from './stubs/recipe.stub';
 
 type EntityValues = {
   name: string;
@@ -28,9 +34,12 @@ export class TestUtils {
    * Clean the database and load all entities
    */
   async reloadEntities() {
-    const entities = this.getEntities();
-    await this.cleanAll(entities);
-    await this.loadAll(entities);
+    try {
+      const entities = this.getEntities();
+      await this.cleanAll(entities);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async cleanAll(entities: EntityValues[]) {
@@ -44,12 +53,32 @@ export class TestUtils {
         `TRUNCATE TABLE ${allEntities} RESTART IDENTITY;`,
       );
     } catch (error) {
-      throw new Error(`ERROR [TestUtils.cleanAll]: to cleaning db:${error}`);
+      throw new Error(
+        `ERROR [TestUtils.cleanAll]: to cleaning db:${error.message}`,
+      );
     }
   }
 
-  async loadAll(entities: EntityValues[]) {
+  async loadAll() {
     try {
+      const recipeRepostiroy = this.connection.getRepository(Recipe);
+      const ingreRepository = this.connection.getRepository(Ingredient);
+      const stepRepository = this.connection.getRepository(Step);
+
+      const recipe1Res = await recipeRepostiroy.save(recipe1);
+      const recipe2Res = await recipeRepostiroy.save(recipe2);
+
+      ingredient1.recipes = recipe1Res;
+      await ingreRepository.save([ingredient1, ingredient1]);
+
+      ingredient1.recipes = recipe2Res;
+      await ingreRepository.save([ingredient1]);
+
+      step1.recipes = recipe1Res;
+      await stepRepository.save(step1);
+
+      step1.recipes = recipe2Res;
+      await stepRepository.save(step1);
     } catch (error) {
       throw new Error(
         `ERROR [TestUtils.loadAll]: to load all the data on db: ${error}`,
@@ -57,8 +86,9 @@ export class TestUtils {
     }
   }
 
-  async loadUser(entities: EntityValues[]) {
+  async loadUser() {
     try {
+      await this.connection.getRepository(User).save(stubUser);
     } catch (error) {
       throw new Error(
         `ERROR [TestUtils.loadUser]: to load data on db: ${error}`,
