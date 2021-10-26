@@ -1,3 +1,8 @@
+import { useContext } from "react";
+import apiRequest from "../utils/apiRequest";
+import { UserContext } from "../contexts/userContext";
+import { useHistory } from "react-router";
+
 import Menu, { MenuProps } from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -10,9 +15,24 @@ interface Props extends MenuProps {
 }
 
 function UserSettings({ anchorEl, handleClose, open, ...props }: Props) {
+	const { setUser } = useContext(UserContext);
+	const history = useHistory();
+
+	const logOutHandle = async () => {
+		await apiRequest({
+			url: "authentication/log-out",
+			method: "POST",
+			withCredentials: true,
+		});
+
+		setUser(undefined);
+		history.push("/");
+		handleClose();
+	};
+
 	return (
 		<Menu open={open} anchorEl={anchorEl} {...props}>
-			<MenuItem onClick={handleClose}>
+			<MenuItem onClick={() => logOutHandle()}>
 				<ListItemIcon>
 					<LogoutIcon />
 				</ListItemIcon>

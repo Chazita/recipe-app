@@ -41,6 +41,8 @@ function App() {
 		}
 	}, [prefers]);
 
+	
+
 	return (
 		<UserContext.Provider value={{ user, setUser }}>
 			<ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -53,7 +55,7 @@ function App() {
 					<Suspense
 						fallback={<LoadingBackdrop sx={{ color: "#fff" }} open={true} />}
 					>
-						<Routes />
+						{!isLoading && <Routes />}
 					</Suspense>
 				</Box>
 			</ThemeProvider>

@@ -134,6 +134,7 @@ function MenuDrawer({ open, setOpen }: Props) {
 								<SettingsIcon />
 							</IconButton>
 						}
+						sx={{ marginBottom: "0.2rem" }}
 					>
 						<UserSettings
 							open={Boolean(userMenu)}
