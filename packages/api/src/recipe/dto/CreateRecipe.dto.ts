@@ -16,7 +16,7 @@ class CreateRecipeDTO {
 
   @IsString()
   @IsNotEmpty()
-  descrption: string;
+  description: string;
 
   @IsEnum(Category)
   category: Category;
