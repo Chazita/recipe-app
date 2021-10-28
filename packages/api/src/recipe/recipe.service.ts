@@ -6,6 +6,8 @@ import CreateRecipeDTO from './dto/CreateRecipe.dto';
 import { Ingredient } from './entities/ingredient.entity';
 import { Recipe } from './entities/recipe.entity';
 import { Step } from './entities/step.entity';
+import { PaginationParams } from 'src/utils/paginationParams';
+import UpdateRecipeDTO from './dto/UpdateRecipe.dto';
 
 @Injectable()
 export class RecipeService {
@@ -28,7 +30,6 @@ export class RecipeService {
       if (recipe) {
         return recipe;
       }
-
       throw new HttpException('Post not Found', HttpStatus.NOT_FOUND);
     } catch (error) {
       throw new HttpException(
@@ -36,6 +37,19 @@ export class RecipeService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async getRecipeWithPagination(query: PaginationParams) {
+    const page = query.page || 1;
+    const skip = (page - 1) * 10;
+
+    const data = await this.recipeRepository.findAndCount({
+      order: { id: 'DESC' },
+      take: 10,
+      skip,
+    });
+
+    return { data, page };
   }
 
   async createRecipe(recipe: CreateRecipeDTO, user: User) {
@@ -61,7 +75,7 @@ export class RecipeService {
     }
   }
 
-  async updateRecipe(recipe: Recipe) {
+  async updateRecipe(recipe: UpdateRecipeDTO) {
     try {
       await this.recipeRepository.save(recipe);
       await this.ingredientRepository.save(recipe.ingredients);

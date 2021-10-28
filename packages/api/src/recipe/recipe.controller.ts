@@ -4,83 +4,77 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpException,
-  HttpStatus,
   Param,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import CreateRecipeDTO from './dto/CreateRecipe.dto';
 import { Response } from 'express';
-import { Recipe } from './entities/recipe.entity';
+import { ApiTags } from '@nestjs/swagger';
+
+import CreateRecipeDTO from './dto/CreateRecipe.dto';
 import { RecipeService } from './recipe.service';
 import FindOneParam from '../utils/findOneParam';
 import AuthenticationGuard from '../authentication/authentication.guard';
 import RequestWithUser from '../authentication/requestWithUser.interface';
+import { PaginationParams } from 'src/utils/paginationParams';
+import PaginationResponse from './response/paginationResponse';
+import UpdateRecipeDTO from './dto/UpdateRecipe.dto';
 
+@ApiTags('Recipes')
 @Controller('recipe')
 export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
 
+  // @Get()
+  // async getAllRecipes() {
+  //   return await this.recipeService.getAllRecipes();
+  // }
+
+  @HttpCode(200)
   @Get()
-  async getAllRecipes() {
-    return await this.recipeService.getAllRecipes();
+  async getAllRecipeWithQuery(@Query() query: PaginationParams) {
+    const { data, page } = await this.recipeService.getRecipeWithPagination(
+      query,
+    );
+
+    return PaginationResponse(data, page);
   }
 
+  @HttpCode(200)
   @Get(':id')
-  async getRecipeById(@Param('id') { id }: FindOneParam, @Res() res: Response) {
-    try {
-      const recipes = await this.recipeService.getRecipeById(Number(id));
-
-      return res.status(HttpStatus.OK).json(recipes);
-    } catch (error) {
-      const e = error as HttpException;
-      return res.status(e.getStatus()).json({ message: e.getResponse() });
-    }
+  async getRecipeById(@Param() { id }: FindOneParam) {
+    const recipes = await this.recipeService.getRecipeById(+id);
+    return recipes;
   }
 
+  // when a insert a recipe the entire server crash
   @HttpCode(204)
   @UseGuards(AuthenticationGuard)
   @Post()
   async createRecipe(
     @Body() recipe: CreateRecipeDTO,
     @Req() req: RequestWithUser,
-    @Res() res: Response,
   ) {
-    try {
-      await this.recipeService.createRecipe(recipe, req.user);
+    await this.recipeService.createRecipe(recipe, req.user);
 
-      return res.status(204).send();
-    } catch (error) {
-      const e = error as HttpException;
-      return res.status(e.getStatus()).json({ message: e.getResponse() });
-    }
+    return;
   }
 
   @HttpCode(204)
   @Put()
-  async updateRecipe(@Body() recipe: Recipe, @Res() res: Response) {
-    try {
-      await this.recipeService.updateRecipe(recipe);
-      return res.status(204).send();
-    } catch (error) {
-      const e = error as HttpException;
-      return res.status(e.getStatus()).json({ message: e.getResponse() });
-    }
+  async updateRecipe(@Body() recipe: UpdateRecipeDTO) {
+    await this.recipeService.updateRecipe(recipe);
+    return;
   }
 
   @HttpCode(204)
   @Delete(':id')
-  async deleteRecipe(@Param('id') { id }: FindOneParam, @Res() res: Response) {
-    try {
-      await this.recipeService.deleteRecipe(+id);
-      return res.status(204).send();
-    } catch (error) {
-      const e = error as HttpException;
-      return res.status(e.getStatus()).json({ message: e.getResponse() });
-    }
+  async deleteRecipe(@Param('id') { id }: FindOneParam) {
+    await this.recipeService.deleteRecipe(+id);
+    return;
   }
 }

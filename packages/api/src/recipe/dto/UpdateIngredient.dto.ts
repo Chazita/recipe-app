@@ -2,7 +2,12 @@ import { Unit } from '../enum/unit.enum';
 import { IsString, IsNumber, IsEnum, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-class CreateIngredientDTO {
+class UpdateIngredientDTO {
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty()
+  id: number;
+
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
@@ -19,4 +24,4 @@ class CreateIngredientDTO {
   unit: Unit;
 }
 
-export default CreateIngredientDTO;
+export default UpdateIngredientDTO;

@@ -1,6 +1,10 @@
 import { IsString, IsNumber, IsNotEmpty, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-class CreateStepDTO {
+class UpdateStepDTO {
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty()
+  id: number;
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
@@ -13,4 +17,4 @@ class CreateStepDTO {
   stepDescription: string;
 }
 
-export default CreateStepDTO;
+export default UpdateStepDTO;

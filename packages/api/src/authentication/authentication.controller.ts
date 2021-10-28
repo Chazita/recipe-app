@@ -11,12 +11,15 @@ import {
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { ApiTags, ApiResponse } from '@nestjs/swagger';
+
 import AuthenticationGuard from './authentication.guard';
 import { AuthenticationService } from './authentication.service';
 import LoginDTO from './dto/login.dto';
 import RegisterDTO from './dto/register.dto';
 import RequestWithUser from './requestWithUser.interface';
 
+@ApiTags('Authentication')
 @Controller('authentication')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthenticationController {
@@ -24,6 +27,7 @@ export class AuthenticationController {
 
   @UseGuards(AuthenticationGuard)
   @HttpCode(200)
+  @ApiResponse({ status: 200, description: 'The users is authenticated' })
   @Get()
   authenticate(@Req() req: RequestWithUser) {
     const user = req.user;
