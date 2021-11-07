@@ -16,6 +16,9 @@ export class Ingredient {
   @Column({ type: 'enum', enum: Unit, default: Unit.NONE })
   unit: Unit;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients)
+  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   recipes: Recipe;
 }

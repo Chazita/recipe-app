@@ -12,6 +12,9 @@ export class Step {
   @Column({ length: 500 })
   stepDescription: string;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.steps)
+  @ManyToOne(() => Recipe, (recipe) => recipe.steps, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   recipes: Recipe;
 }
