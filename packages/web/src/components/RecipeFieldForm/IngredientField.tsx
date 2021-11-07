@@ -64,7 +64,7 @@ function IngredientField({ control, register }: FieldsProps) {
 									inputProps={{ ...register(`ingredients.${index}.quantity`) }}
 								/>
 								<Select
-									defaultValue=""
+									defaultValue={ingredient.unit}
 									{...register(`ingredients.${index}.unit`)}
 									sx={{ width: "40%" }}
 									variant="filled"
@@ -88,7 +88,7 @@ function IngredientField({ control, register }: FieldsProps) {
 				))}
 			</List>
 
-			<Button variant="contained" onClick={() => append({})}>
+			<Button variant="contained" onClick={() => append({ unit: Unit.NONE })}>
 				Add Ingredient
 			</Button>
 		</>

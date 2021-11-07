@@ -16,7 +16,7 @@ export const routes: Routes[] = [
 		text: "Home",
 	},
 	{
-		path: "/recipes-list",
+		path: "/recipes-list/1",
 		icon: <NotesIcon />,
 		text: "Recipe List",
 	},
@@ -31,6 +31,11 @@ export const notLogIn: Routes[] = [
 ];
 
 export const isLogIn: Routes[] = [
+	{
+		path: "/user/my-recipes/1",
+		icon: <NotesIcon />,
+		text: "My Recipes",
+	},
 	{
 		path: "/recipe-create",
 		icon: <NoteAddIcon />,

@@ -36,10 +36,14 @@ function CreateRecipe() {
 
 	const createMutation = useMutation((newRecipe: RecipeForm) =>
 		apiRequest({
-			url: "recipe/create",
+			url: "recipe",
 			method: "POST",
 			withCredentials: true,
 			data: newRecipe,
+		}).then((result) => {
+			if (result.status === 204) {
+				reset();
+			}
 		})
 	);
 
@@ -55,7 +59,7 @@ function CreateRecipe() {
 				minHeight: "calc(100vh - 56px)",
 			}}
 		>
-			<FormStyled>
+			<FormStyled onSubmit={handleSubmit(createSubmit)}>
 				<Typography
 					variant="h3"
 					sx={{
@@ -73,6 +77,8 @@ function CreateRecipe() {
 					sx={{ marginBottom: "1rem" }}
 				/>
 				<TextField
+					multiline
+					maxRows={4}
 					label="Description"
 					variant="filled"
 					{...register("description")}
@@ -99,6 +105,7 @@ function CreateRecipe() {
 				<IngredientField {...{ control, register }} />
 				<StepField {...{ control, register }} />
 				<Button
+					type="submit"
 					variant="contained"
 					sx={{ marginBottom: "1rem", marginTop: "1rem" }}
 				>

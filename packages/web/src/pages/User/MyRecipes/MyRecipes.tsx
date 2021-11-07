@@ -1,16 +1,20 @@
+import { useState } from "react";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { useQuery } from "react-query";
-import { useParams, Link } from "react-router-dom";
-import apiRequest from "../../utils/apiRequest";
-import { Recipe } from "../../types/Recipe";
+import apiRequest from "../../../utils/apiRequest";
+import { Recipe } from "../../../types/Recipe";
 
 import Container from "@mui/material/Container";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Pagination from "@mui/material/Pagination";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
+import DeleteDialog from "./DeleteDialog";
 
 type QueryResponse = {
 	recipes: Recipe[];
@@ -21,14 +25,32 @@ type QueryResponse = {
 	lastPage: number;
 };
 
-function RecipesList() {
+function MyRecipes() {
+	const history = useHistory();
+	const [openDialog, setOpenDialog] = useState(false);
 	const { page } = useParams<{ page: string }>();
-	const { data } = useQuery(["recipe", page], async () => {
+	const { data } = useQuery(["my-recipe", page], async () => {
 		const result = await apiRequest<QueryResponse>({
-			url: `recipe?page=${page}`,
+			url: `recipe/my-recipes?page=${page}`,
+			method: "GET",
+			withCredentials: true,
 		});
 		return result;
 	});
+
+	const redirectToDetails = (id: number) => {
+		history.push(`/recipe-details/${id}`);
+	};
+
+	const redirecToEdit = (id: number) => {
+		history.push(`/user/recipe-edit/${id}`);
+	};
+
+	const deleteRecipe = (id: number) => {
+		if (data) {
+			data.data.recipes = data?.data.recipes.filter((value) => value.id !== id);
+		}
+	};
 
 	return (
 		<Container
@@ -42,12 +64,8 @@ function RecipesList() {
 			<List sx={{ flexGrow: 1 }}>
 				{data?.data.recipes.map((recipe) => (
 					<ListItem key={recipe.id}>
-						<Card
-							sx={{ width: "100%", textDecoration: "none" }}
-							component={Link}
-							to={`/recipe-details/${recipe.id}`}
-						>
-							<CardContent>
+						<Card sx={{ width: "100%" }}>
+							<CardContent onClick={() => redirectToDetails(recipe.id)}>
 								<Typography variant="h5"> {recipe.name} </Typography>
 								<Typography
 									variant="body2"
@@ -62,6 +80,20 @@ function RecipesList() {
 									{recipe.description}
 								</Typography>
 							</CardContent>
+							<CardActions>
+								<Button color="info" onClick={() => redirecToEdit(recipe.id)}>
+									Edit
+								</Button>
+								<Button color="error" onClick={() => setOpenDialog(true)}>
+									Delete
+								</Button>
+								<DeleteDialog
+									open={openDialog}
+									setOpen={setOpenDialog}
+									recipe={recipe}
+									deleteRecipe={deleteRecipe}
+								/>
+							</CardActions>
 						</Card>
 					</ListItem>
 				))}
@@ -86,5 +118,4 @@ function RecipesList() {
 		</Container>
 	);
 }
-
-export default RecipesList;
+export default MyRecipes;
