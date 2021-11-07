@@ -58,13 +58,13 @@ export class AuthenticationController {
     return userResult;
   }
 
+  @HttpCode(200)
   @UseGuards(AuthenticationGuard)
   @Post('log-out')
-  async logOut(@Req() req: RequestWithUser, @Res() res: Response) {
-    res.setHeader(
+  async logOut(@Req() req: RequestWithUser) {
+    req.res.setHeader(
       'Set-Cookie',
       this.authenticationService.getCookieForLogOut(),
     );
-    return res.sendStatus(200);
   }
 }
