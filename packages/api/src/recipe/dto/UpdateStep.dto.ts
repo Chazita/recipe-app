@@ -5,6 +5,7 @@ class UpdateStepDTO {
   @IsNotEmpty()
   @ApiProperty()
   id: number;
+
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()

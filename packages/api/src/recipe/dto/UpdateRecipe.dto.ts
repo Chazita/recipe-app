@@ -5,7 +5,6 @@ import {
   IsEnum,
   IsNotEmpty,
   IsArray,
-  ArrayMinSize,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -34,12 +33,10 @@ class UpdateRecipeDTO {
   category: Category;
 
   @IsArray()
-  @ArrayMinSize(1)
   @ApiProperty({ type: [UpdateIngredientDTO] })
   ingredients: UpdateIngredientDTO[];
 
   @IsArray()
-  @ArrayMinSize(1)
   @ApiProperty({ type: [UpdateStepDTO] })
   steps: UpdateStepDTO[];
 }
