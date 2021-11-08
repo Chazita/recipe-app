@@ -1,10 +1,12 @@
 {
 	"name": "web",
 	"version": "0.0.0",
+	"license": "MIT",
+	"author": "chazita",
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
-		"serve": "vite preview"
+		"preview": "vite preview"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.5.0",

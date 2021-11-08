@@ -2,12 +2,12 @@
   "name": "api",
   "version": "0.0.1",
   "description": "Recipe app api",
-  "author": "",
+  "author": "chazita",
   "private": true,
   "engines": {
     "yarn": "1.x"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

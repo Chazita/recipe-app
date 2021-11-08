@@ -1,22 +1,19 @@
 # Recipe App Web
 
-## Usage
-
-Run
+## Running the app
 
 ```bash
+#development mode
 yarn dev
 ```
 
-Build
-
 ```bash
+#build the app
 yarn build
 ```
 
-Preview
-
 ```bash
+#preview mode
 yarn preview
 ```
 
