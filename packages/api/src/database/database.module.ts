@@ -17,7 +17,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         entities: [__dirname + '/../**/**/*.entity.{.ts,.js}'],
         synchronize: true,
         autoLoadEntities: true,
-        url: configService.get('DATABASE_URL'),
       }),
     }),
   ],
