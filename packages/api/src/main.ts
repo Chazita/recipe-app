@@ -23,14 +23,13 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   app.use(cookieParser());
+  const configService: ConfigService = app.get(ConfigService);
 
   app.enableCors({
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: configService.get('CORS_ORIGIN'),
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   });
-
-  const configService: ConfigService = app.get(ConfigService);
 
   SwaggerModule.setup('api', app, document);
   await app.listen(configService.get('PORT'));
