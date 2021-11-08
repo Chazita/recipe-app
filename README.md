@@ -8,7 +8,7 @@ Recipe app **tries** to emulate a website with recipes.
 yarn bootstrap
 ```
 
-## Here's is both project in production
+## Here's both project in production
 
 The web client is in [Vercel](https://recipe-app-chazita.vercel.app/).
 
