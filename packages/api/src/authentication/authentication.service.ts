@@ -61,6 +61,6 @@ export class AuthenticationService {
   }
 
   getCookieForLogOut() {
-    return `Authentication=;HttpOnly;Path=/;`;
+    return `Authentication=;HttpOnly;Path=/;SameSite=None;`;
   }
 }
