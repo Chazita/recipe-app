@@ -57,7 +57,7 @@ export class AuthenticationService {
   getCookieWithJwtToken(userId: number) {
     const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/;`;
+    return `Authentication=${token}; HttpOnly; Path=/;SameSite=None;`;
   }
 
   getCookieForLogOut() {
