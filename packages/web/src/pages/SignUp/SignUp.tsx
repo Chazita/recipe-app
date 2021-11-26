@@ -5,13 +5,13 @@ import { useMutation } from "react-query";
 import { Redirect } from "react-router-dom";
 import apiRequest from "../../utils/apiRequest";
 import LoadingBackdrop from "../../components/LoadingBackdrop/LoadingBackdrop";
+import MyContainer from "../../components/MyContainer/MyContainer";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import Container from "@mui/material/Container";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -58,12 +58,11 @@ function SignUp() {
 	}
 
 	return (
-		<Container
+		<MyContainer
 			maxWidth="xs"
 			sx={{
 				display: "flex",
 				flexDirection: "column",
-				minHeight: "calc(100vh - 56px)",
 				justifyContent: "center",
 			}}
 		>
@@ -175,7 +174,7 @@ function SignUp() {
 					Sign Up
 				</Button>
 			</FormStyled>
-		</Container>
+		</MyContainer>
 	);
 }
 

@@ -17,6 +17,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import LoadingBackdrop from "../../components/LoadingBackdrop/LoadingBackdrop";
 import { UserContext } from "../../contexts/userContext";
 import { User } from "../../types/User";
+import MyContainer from "../../components/MyContainer/MyContainer";
 
 const FormStyled = styled("form")(({ theme }) => ({
 	height: "100%",
@@ -55,17 +56,15 @@ function Login() {
 	};
 
 	if (loginMutation.isSuccess) {
-		console.log(loginMutation.data);
 		return <Redirect to={{ pathname: "/" }} />;
 	}
 
 	return (
-		<Container
+		<MyContainer
 			maxWidth="xs"
 			sx={{
 				display: "flex",
 				flexDirection: "column",
-				minHeight: "calc(100vh - 56px)",
 				justifyContent: "center",
 			}}
 		>
@@ -148,7 +147,7 @@ function Login() {
 					Don't have a account? <Link to="/sign-up">Sign up</Link>
 				</Typography>
 			</FormStyled>
-		</Container>
+		</MyContainer>
 	);
 }
 

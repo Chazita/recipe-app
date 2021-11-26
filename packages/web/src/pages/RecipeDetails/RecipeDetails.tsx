@@ -3,12 +3,12 @@ import { useQuery } from "react-query";
 import apiRequest from "../../utils/apiRequest";
 import { Recipe } from "../../types/Recipe";
 
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import MyContainer from "../../components/MyContainer/MyContainer";
 
 function RecipeDetails() {
 	const { id } = useParams<{ id: string }>();
@@ -19,13 +19,13 @@ function RecipeDetails() {
 	});
 
 	return (
-		<Container
+		<MyContainer
 			sx={{
 				display: "flex",
 				flexDirection: "column",
-				minHeight: "calc(100vh - 56px)",
 				color: (theme) => theme.palette.text.primary,
 			}}
+			maxWidth="xl"
 		>
 			<Typography variant="h3" alignSelf="center" sx={{ marginTop: "1rem" }}>
 				{data?.name}
@@ -56,7 +56,7 @@ function RecipeDetails() {
 					</ListItem>
 				))}
 			</List>
-		</Container>
+		</MyContainer>
 	);
 }
 

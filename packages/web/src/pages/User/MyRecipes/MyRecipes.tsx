@@ -3,8 +3,9 @@ import { useParams, useHistory, Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import apiRequest from "../../../utils/apiRequest";
 import { Recipe } from "../../../types/Recipe";
+import MyContainer from "../../../components/MyContainer/MyContainer";
 
-import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
@@ -53,50 +54,59 @@ function MyRecipes() {
 	};
 
 	return (
-		<Container
+		<MyContainer
 			sx={{
 				display: "flex",
 				flexDirection: "column",
-				minHeight: "calc(100vh - 56px)",
 				alignContent: "center",
 			}}
 		>
 			<List sx={{ flexGrow: 1 }}>
-				{data?.data.recipes.map((recipe) => (
-					<ListItem key={recipe.id}>
-						<Card sx={{ width: "100%" }}>
-							<CardContent onClick={() => redirectToDetails(recipe.id)}>
-								<Typography variant="h5"> {recipe.name} </Typography>
-								<Typography
-									variant="body2"
-									color="text.secondary"
-									sx={{
-										wordBreak: "break-word",
-										textOverflow: "ellipsis",
-										overflow: "hidden",
-										whiteSpace: "nowrap",
-									}}
-								>
-									{recipe.description}
-								</Typography>
-							</CardContent>
-							<CardActions>
-								<Button color="info" onClick={() => redirecToEdit(recipe.id)}>
-									Edit
-								</Button>
-								<Button color="error" onClick={() => setOpenDialog(true)}>
-									Delete
-								</Button>
-								<DeleteDialog
-									open={openDialog}
-									setOpen={setOpenDialog}
-									recipe={recipe}
-									deleteRecipe={deleteRecipe}
-								/>
-							</CardActions>
-						</Card>
-					</ListItem>
-				))}
+				<Grid container>
+					{data?.data.recipes.map((recipe) => (
+						<Grid xs={12} sm={6} md={4} item key={recipe.id}>
+							<ListItem>
+								<Card sx={{ width: "100%" }}>
+									<CardContent
+										sx={{ "&:hover": { cursor: "pointer" } }}
+										onClick={() => redirectToDetails(recipe.id)}
+									>
+										<Typography variant="h5"> {recipe.name} </Typography>
+										<Typography
+											variant="body2"
+											color="text.secondary"
+											sx={{
+												wordBreak: "break-word",
+												textOverflow: "ellipsis",
+												overflow: "hidden",
+												whiteSpace: "nowrap",
+											}}
+										>
+											{recipe.description}
+										</Typography>
+									</CardContent>
+									<CardActions>
+										<Button
+											color="info"
+											onClick={() => redirecToEdit(recipe.id)}
+										>
+											Edit
+										</Button>
+										<Button color="error" onClick={() => setOpenDialog(true)}>
+											Delete
+										</Button>
+										<DeleteDialog
+											open={openDialog}
+											setOpen={setOpenDialog}
+											recipe={recipe}
+											deleteRecipe={deleteRecipe}
+										/>
+									</CardActions>
+								</Card>
+							</ListItem>
+						</Grid>
+					))}
+				</Grid>
 			</List>
 
 			<Pagination
@@ -115,7 +125,7 @@ function MyRecipes() {
 					/>
 				)}
 			/>
-		</Container>
+		</MyContainer>
 	);
 }
 export default MyRecipes;

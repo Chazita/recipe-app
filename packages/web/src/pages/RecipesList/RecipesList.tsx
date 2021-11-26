@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import apiRequest from "../../utils/apiRequest";
 import { Recipe } from "../../types/Recipe";
 
-import Container from "@mui/material/Container";
+import MyContainer from "../../components/MyContainer/MyContainer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Pagination from "@mui/material/Pagination";
@@ -11,6 +11,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import PaginationItem from "@mui/material/PaginationItem";
+import Grid from "@mui/material/Grid";
 
 type QueryResponse = {
 	recipes: Recipe[];
@@ -31,44 +32,52 @@ function RecipesList() {
 	});
 
 	return (
-		<Container
+		<MyContainer
 			sx={{
 				display: "flex",
 				flexDirection: "column",
-				minHeight: "calc(100vh - 56px)",
 				alignContent: "center",
 			}}
+			maxWidth="lg"
 		>
 			<List sx={{ flexGrow: 1 }}>
-				{data?.data.recipes.map((recipe) => (
-					<ListItem key={recipe.id}>
-						<Card
-							sx={{ width: "100%", textDecoration: "none" }}
-							component={Link}
-							to={`/recipe-details/${recipe.id}`}
-						>
-							<CardContent>
-								<Typography variant="h5"> {recipe.name} </Typography>
-								<Typography
-									variant="body2"
-									color="text.secondary"
-									sx={{
-										wordBreak: "break-word",
-										textOverflow: "ellipsis",
-										overflow: "hidden",
-										whiteSpace: "nowrap",
-									}}
+				<Grid container>
+					{data?.data.recipes.map((recipe) => (
+						<Grid xs={12} sm={6} md={4} item key={recipe.id}>
+							<ListItem>
+								<Card
+									sx={{ width: "100%", textDecoration: "none" }}
+									component={Link}
+									to={`/recipe-details/${recipe.id}`}
 								>
-									{recipe.description}
-								</Typography>
-							</CardContent>
-						</Card>
-					</ListItem>
-				))}
+									<CardContent>
+										<Typography variant="h5"> {recipe.name} </Typography>
+										<Typography
+											variant="body2"
+											color="text.secondary"
+											sx={{
+												wordBreak: "break-word",
+												textOverflow: "ellipsis",
+												overflow: "hidden",
+												whiteSpace: "nowrap",
+											}}
+										>
+											{recipe.description}
+										</Typography>
+									</CardContent>
+								</Card>
+							</ListItem>
+						</Grid>
+					))}
+				</Grid>
 			</List>
 
 			<Pagination
-				sx={{ alignSelf: "center", justifySelf: "end", marginBottom: "1rem" }}
+				sx={{
+					marginBottom: "1rem",
+					alignSelf: "center",
+					justifySelf: "flex-end",
+				}}
 				size="medium"
 				page={+page}
 				count={data?.data.lastPage}
@@ -83,7 +92,7 @@ function RecipesList() {
 					/>
 				)}
 			/>
-		</Container>
+		</MyContainer>
 	);
 }
 

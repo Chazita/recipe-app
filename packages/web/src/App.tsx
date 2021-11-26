@@ -41,8 +41,6 @@ function App() {
 		}
 	}, [prefers]);
 
-	
-
 	return (
 		<UserContext.Provider value={{ user, setUser }}>
 			<ThemeProvider theme={darkMode ? darkTheme : lightTheme}>

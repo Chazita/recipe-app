@@ -47,7 +47,6 @@ $ yarn run test:cov
 - [x] User sign in, sign up and log out.
 - [x] Authentication and Authorization.
 - [x] Add OpenApi.
-- [ ] Write integration test.
 
 ## License
 

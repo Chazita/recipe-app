@@ -23,4 +23,4 @@ yarn preview
 - [x] List of recipes.
 - [x] Sign in , Sign up and Log out.
 - [x] CRUD functions of recipes.
-- [ ] Responsive design.
+- [x] Responsive design.

@@ -1,6 +1,10 @@
 import React, { useContext, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { isLogIn, notLogIn, routes } from "../utils/arrayOfRoutes";
+import {
+	avatarColorGenerator,
+	avatarName,
+} from "../utils/avatarAtributesGenerator";
 
 import Drawer from "@mui/material/SwipeableDrawer";
 import Divider from "@mui/material/Divider";
@@ -32,42 +36,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 	justifyContent: "space-between",
 	...theme.mixins.toolbar,
 }));
-
-function stringToColor(name: string) {
-	let hash = 0;
-	let i;
-
-	for (i = 0; i < name.length; i++) {
-		hash = name.charCodeAt(i) + ((hash << 5) - hash);
-	}
-
-	let color = "#";
-
-	for (i = 0; i < 3; i++) {
-		const value = (hash >> (i * 8)) & 0xff;
-		color += `00${value.toString(16)}`.substr(-2);
-	}
-
-	return color;
-}
-
-function stringAvatar(name: string | undefined) {
-	if (!name) {
-		return {
-			sx: {
-				bgcolor: "#fff",
-				children: "AA ",
-			},
-		};
-	} else {
-		return {
-			sx: {
-				bgcolor: stringToColor(name),
-			},
-			children: `${name.split(" ")[0][0]}`,
-		};
-	}
-}
 
 function MenuDrawer({ open, setOpen }: Props) {
 	const { user } = useContext(UserContext);
@@ -151,7 +119,10 @@ function MenuDrawer({ open, setOpen }: Props) {
 							}}
 						/>
 						<ListItemAvatar>
-							<Avatar {...stringAvatar(user.name)} />
+							<Avatar
+								sx={{ ...avatarColorGenerator(user.name) }}
+								{...avatarName(user.name)}
+							/>
 						</ListItemAvatar>
 						<ListItemText primary={user?.name} />
 					</ListItem>

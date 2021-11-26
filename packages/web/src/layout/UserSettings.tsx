@@ -19,15 +19,19 @@ function UserSettings({ anchorEl, handleClose, open, ...props }: Props) {
 	const history = useHistory();
 
 	const logOutHandle = async () => {
-		await apiRequest({
-			url: "authentication/log-out",
-			method: "POST",
-			withCredentials: true,
-		});
+		try {
+			await apiRequest({
+				url: "authentication/log-out",
+				method: "POST",
+				withCredentials: true,
+			});
 
-		setUser(undefined);
-		history.push("/");
-		handleClose();
+			setUser(undefined);
+			history.push("/");
+			handleClose();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
