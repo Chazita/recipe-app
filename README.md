@@ -1,6 +1,6 @@
 # Recipe App
 
-Recipe app **tries** to emulate a website with recipes.
+Recipe app **tries** to emulate a simple website with recipes.
 
 ## Installation
 
